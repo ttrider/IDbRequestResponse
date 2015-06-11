@@ -41,3 +41,10 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+/IDbRequestResponse/bin/Debug
+/IDbRequestResponse/obj/Debug
+/IDbRequestResponse/packages
+/packages
+*.suo
+*.ncrunchproject
+*.nupkg
