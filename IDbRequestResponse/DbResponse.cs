@@ -30,7 +30,7 @@ namespace TTRider.Data.RequestResponse
         private bool disposed;
         private DataRecordEnumerable currentEnumerable;
 
-        internal static IDbResponse GetResponse(IDbRequest request)
+        public static IDbResponse GetResponse(IDbRequest request)
         {
             if (request == null) throw new ArgumentNullException("request");
             if (request.Command == null) throw new ArgumentException("request.Command");
@@ -41,7 +41,7 @@ namespace TTRider.Data.RequestResponse
             return response;
         }
 
-        internal static async Task<IDbResponse> GetResponseAsync(IDbRequest request)
+        public static async Task<IDbResponse> GetResponseAsync(IDbRequest request)
         {
             if (request == null) throw new ArgumentNullException("request");
             if (request.Command == null) throw new ArgumentException("request.Command");
@@ -76,6 +76,7 @@ namespace TTRider.Data.RequestResponse
             // process Prerequisites
             foreach (var prerequisiteCommand in this.Request.PrerequisiteCommands)
             {
+                prerequisiteCommand.Connection = this.Request.Command.Connection;
                 Log.DebugFormat("{0}-PREREQUISITE_COMMAND: {1}", this.sessionHash, prerequisiteCommand.GetCommandSummary());
                 await prerequisiteCommand.ExecuteNonQueryAsync();
             }
