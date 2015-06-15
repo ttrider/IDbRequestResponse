@@ -7,7 +7,7 @@ namespace TTRider.Data.RequestResponse
 {
     public class DbRequest : IDbRequest
     {
-        public static IDbRequest Create(IDbCommand command, DbRequestMode? mode, IEnumerable<IDbCommand> prerequisiteStatements = null)
+        public static IDbRequest Create(IDbCommand command, DbRequestMode? mode = DbRequestMode.NoBufferReuseMemory, IEnumerable<IDbCommand> prerequisiteStatements = null)
         {
             if (command == null) throw new ArgumentNullException("command");
 

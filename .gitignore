@@ -51,3 +51,5 @@ Temporary Items
 /IDbRequestResponse/bin/Release
 /IDbRequestResponse/obj/Release
 *.user
+/Tests/bin/Release
+/Tests/obj
