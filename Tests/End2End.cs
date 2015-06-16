@@ -56,6 +56,45 @@ namespace Tests
         }
 
         [TestMethod]
+        public void SelectDataNoBufferReuseMemoryAsync()
+        {
+            var connection = new SqlConnection(connectionString);
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = "SELECT Id, Name FROM Person Order By Id;";
+
+            var request = DbRequest.Create(command, DbRequestMode.NoBufferReuseMemory);
+            Assert.IsNotNull(request);
+
+            var t = request.GetResponseAsync();
+            var response = t.GetAwaiter().GetResult();
+            
+            Assert.IsNotNull(response);
+
+            var records = response.Records.GetEnumerator();
+            Assert.IsTrue(records.MoveNext());
+            Assert.AreEqual(1, records.Current[0]);
+            Assert.AreEqual("James", records.Current[1]);
+            Assert.IsTrue(records.MoveNext());
+            Assert.AreEqual(2, records.Current[0]);
+            Assert.AreEqual("Spoke", records.Current[1]);
+            Assert.IsTrue(records.MoveNext());
+            Assert.AreEqual(3, records.Current[0]);
+            Assert.AreEqual("Bones", records.Current[1]);
+            Assert.IsTrue(records.MoveNext());
+            Assert.AreEqual(4, records.Current[0]);
+            Assert.AreEqual("Uhura", records.Current[1]);
+            Assert.IsTrue(records.MoveNext());
+            Assert.AreEqual(5, records.Current[0]);
+            Assert.AreEqual("Chekov", records.Current[1]);
+            Assert.IsTrue(records.MoveNext());
+            Assert.AreEqual(6, records.Current[0]);
+            Assert.AreEqual("Sulu", records.Current[1]);
+            Assert.IsFalse(records.MoveNext());
+            records.Dispose();
+        }
+
+        [TestMethod]
         public void SelectDataNoBuffer()
         {
             var connection = new SqlConnection(connectionString);
