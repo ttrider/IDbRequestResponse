@@ -37,7 +37,7 @@ namespace TTRider.Data.RequestResponse
             if (request.Command.Connection == null) throw new ArgumentException("request.Command.Connection");
 
             var response = new DbResponse(request);
-            response.ProcessRequestAsync().Wait();
+            response.ProcessRequest();
             return response;
         }
 
@@ -83,6 +83,25 @@ namespace TTRider.Data.RequestResponse
 
             Log.DebugFormat("{0}-COMMAND: {1}", this.sessionHash, command.GetCommandSummary());
             this.reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+        }
+
+        private void ProcessRequest()
+        {
+            if (this.Request.Command.Connection.State != ConnectionState.Open)
+            {
+                this.Request.Command.Connection.Open();
+            }
+
+            // process Prerequisites
+            foreach (var prerequisiteCommand in this.Request.PrerequisiteCommands)
+            {
+                prerequisiteCommand.Connection = this.Request.Command.Connection;
+                Log.DebugFormat("{0}-PREREQUISITE_COMMAND: {1}", this.sessionHash, prerequisiteCommand.GetCommandSummary());
+                prerequisiteCommand.ExecuteNonQuery();
+            }
+
+            Log.DebugFormat("{0}-COMMAND: {1}", this.sessionHash, command.GetCommandSummary());
+            this.reader = command.ExecuteReader(CommandBehavior.CloseConnection);
         }
 
         private void EnsureOutputValues()
@@ -195,10 +214,6 @@ namespace TTRider.Data.RequestResponse
 
             if (reader != null)
             {
-                if (!reader.IsClosed)
-                {
-                    reader.Close();
-                }
                 reader.Dispose();
                 reader = null;
             }
