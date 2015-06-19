@@ -214,7 +214,10 @@ namespace TTRider.Data.RequestResponse
 
             if (reader != null)
             {
-                reader.Dispose();
+                if (!reader.IsClosed)
+                {
+                    reader.Dispose();
+                }
                 reader = null;
             }
 
