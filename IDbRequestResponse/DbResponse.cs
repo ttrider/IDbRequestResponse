@@ -210,7 +210,7 @@ namespace TTRider.Data.RequestResponse
         }
         void Dispose(bool disposing)
         {
-            if (disposed) return;
+            if (!disposing || disposed) return;
 
             if (command != null)
             {
