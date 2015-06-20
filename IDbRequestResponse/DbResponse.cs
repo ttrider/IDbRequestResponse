@@ -212,15 +212,6 @@ namespace TTRider.Data.RequestResponse
         {
             if (disposed) return;
 
-            if (reader != null)
-            {
-                if (!reader.IsClosed)
-                {
-                    reader.Dispose();
-                }
-                reader = null;
-            }
-
             if (command != null)
             {
                 command.Dispose();
