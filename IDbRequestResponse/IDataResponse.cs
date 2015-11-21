@@ -5,11 +5,12 @@
 // Copyright (c) 2014-2015 All Rights Reserved
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 
 namespace TTRider.Data.RequestResponse
 {
-    public interface IDbResponse
+    public interface IDbResponse : IDisposable
     {
         IDbRequest Request { get; }
 

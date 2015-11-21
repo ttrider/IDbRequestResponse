@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TTRider.Data.RequestResponse;
 
@@ -29,69 +30,71 @@ namespace Tests
             var request = DbRequest.Create(command, DbRequestMode.NoBufferReuseMemory);
             Assert.IsNotNull(request);
 
-            var response = request.GetResponse();
-            Assert.IsNotNull(response);
+            using (var response = request.GetResponse())
+            {
+                Assert.IsNotNull(response);
 
-            var records = response.Records.GetEnumerator();
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(1, records.Current[0]);
-            Assert.AreEqual("James", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(2, records.Current[0]);
-            Assert.AreEqual("Spoke", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(3, records.Current[0]);
-            Assert.AreEqual("Bones", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(4, records.Current[0]);
-            Assert.AreEqual("Uhura", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(5, records.Current[0]);
-            Assert.AreEqual("Chekov", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(6, records.Current[0]);
-            Assert.AreEqual("Sulu", records.Current[1]);
-            Assert.IsFalse(records.MoveNext());
-            records.Dispose();
+                var records = response.Records.GetEnumerator();
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(1, records.Current[0]);
+                Assert.AreEqual("James", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(2, records.Current[0]);
+                Assert.AreEqual("Spoke", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(3, records.Current[0]);
+                Assert.AreEqual("Bones", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(4, records.Current[0]);
+                Assert.AreEqual("Uhura", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(5, records.Current[0]);
+                Assert.AreEqual("Chekov", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(6, records.Current[0]);
+                Assert.AreEqual("Sulu", records.Current[1]);
+                Assert.IsFalse(records.MoveNext());
+                records.Dispose();
+            }
         }
 
         [TestMethod]
-        public void SelectDataNoBufferReuseMemoryAsync()
+        public async Task SelectDataNoBufferReuseMemoryAsync()
         {
             var connection = new SqlConnection(connectionString);
-            connection.Open();
+            await connection.OpenAsync();
             var command = connection.CreateCommand();
             command.CommandText = "SELECT Id, Name FROM Person Order By Id;";
 
             var request = DbRequest.Create(command, DbRequestMode.NoBufferReuseMemory);
             Assert.IsNotNull(request);
 
-            var t = request.GetResponseAsync();
-            var response = t.GetAwaiter().GetResult();
-            
-            Assert.IsNotNull(response);
+            using (var response = await request.GetResponseAsync())
+            {
+                Assert.IsNotNull(response);
 
-            var records = response.Records.GetEnumerator();
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(1, records.Current[0]);
-            Assert.AreEqual("James", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(2, records.Current[0]);
-            Assert.AreEqual("Spoke", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(3, records.Current[0]);
-            Assert.AreEqual("Bones", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(4, records.Current[0]);
-            Assert.AreEqual("Uhura", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(5, records.Current[0]);
-            Assert.AreEqual("Chekov", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(6, records.Current[0]);
-            Assert.AreEqual("Sulu", records.Current[1]);
-            Assert.IsFalse(records.MoveNext());
-            records.Dispose();
+                var records = response.Records.GetEnumerator();
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(1, records.Current[0]);
+                Assert.AreEqual("James", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(2, records.Current[0]);
+                Assert.AreEqual("Spoke", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(3, records.Current[0]);
+                Assert.AreEqual("Bones", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(4, records.Current[0]);
+                Assert.AreEqual("Uhura", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(5, records.Current[0]);
+                Assert.AreEqual("Chekov", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(6, records.Current[0]);
+                Assert.AreEqual("Sulu", records.Current[1]);
+                Assert.IsFalse(records.MoveNext());
+                records.Dispose();
+            }
         }
 
         [TestMethod]
@@ -105,30 +108,32 @@ namespace Tests
             var request = DbRequest.Create(command, DbRequestMode.NoBuffer);
             Assert.IsNotNull(request);
 
-            var response = request.GetResponse();
-            Assert.IsNotNull(response);
+            using (var response = request.GetResponse())
+            {
+                Assert.IsNotNull(response);
 
-            var records = response.Records.GetEnumerator();
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(1, records.Current[0]);
-            Assert.AreEqual("James", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(2, records.Current[0]);
-            Assert.AreEqual("Spoke", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(3, records.Current[0]);
-            Assert.AreEqual("Bones", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(4, records.Current[0]);
-            Assert.AreEqual("Uhura", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(5, records.Current[0]);
-            Assert.AreEqual("Chekov", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(6, records.Current[0]);
-            Assert.AreEqual("Sulu", records.Current[1]);
-            Assert.IsFalse(records.MoveNext());
-            records.Dispose();
+                var records = response.Records.GetEnumerator();
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(1, records.Current[0]);
+                Assert.AreEqual("James", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(2, records.Current[0]);
+                Assert.AreEqual("Spoke", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(3, records.Current[0]);
+                Assert.AreEqual("Bones", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(4, records.Current[0]);
+                Assert.AreEqual("Uhura", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(5, records.Current[0]);
+                Assert.AreEqual("Chekov", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(6, records.Current[0]);
+                Assert.AreEqual("Sulu", records.Current[1]);
+                Assert.IsFalse(records.MoveNext());
+                records.Dispose();
+            }
         }
 
         [TestMethod]
@@ -142,30 +147,32 @@ namespace Tests
             var request = DbRequest.Create(command, DbRequestMode.Buffer);
             Assert.IsNotNull(request);
 
-            var response = request.GetResponse();
-            Assert.IsNotNull(response);
+            using (var response = request.GetResponse())
+            {
+                Assert.IsNotNull(response);
 
-            var records = response.Records.GetEnumerator();
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(1, records.Current[0]);
-            Assert.AreEqual("James", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(2, records.Current[0]);
-            Assert.AreEqual("Spoke", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(3, records.Current[0]);
-            Assert.AreEqual("Bones", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(4, records.Current[0]);
-            Assert.AreEqual("Uhura", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(5, records.Current[0]);
-            Assert.AreEqual("Chekov", records.Current[1]);
-            Assert.IsTrue(records.MoveNext());
-            Assert.AreEqual(6, records.Current[0]);
-            Assert.AreEqual("Sulu", records.Current[1]);
-            Assert.IsFalse(records.MoveNext());
-            records.Dispose();
+                var records = response.Records.GetEnumerator();
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(1, records.Current[0]);
+                Assert.AreEqual("James", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(2, records.Current[0]);
+                Assert.AreEqual("Spoke", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(3, records.Current[0]);
+                Assert.AreEqual("Bones", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(4, records.Current[0]);
+                Assert.AreEqual("Uhura", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(5, records.Current[0]);
+                Assert.AreEqual("Chekov", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(6, records.Current[0]);
+                Assert.AreEqual("Sulu", records.Current[1]);
+                Assert.IsFalse(records.MoveNext());
+                records.Dispose();
+            }
         }
 
         [TestMethod]
@@ -181,9 +188,11 @@ namespace Tests
             var request = DbRequest.Create(command, DbRequestMode.Buffer);
             Assert.IsNotNull(request);
 
-            var response = request.GetResponse();
-            Assert.IsNotNull(response);
-            Assert.AreEqual("Spoke", response.Output["@Name"]);
+            using (var response = request.GetResponse())
+            {
+                Assert.IsNotNull(response);
+                Assert.AreEqual("Spoke", response.Output["@Name"]);
+            }
         }
 
         public static string CreateTestDatabase(string id)
