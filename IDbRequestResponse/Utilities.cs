@@ -5,9 +5,11 @@
 // Copyright (c) 2014-2016 All Rights Reserved
 // </copyright>
 
+using System;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace TTRider.Data.RequestResponse
 {
@@ -55,6 +57,27 @@ namespace TTRider.Data.RequestResponse
             }
             sb.AppendLine(command.CommandText);
             return sb.ToString();
+        }
+
+
+        public static async Task<int?> ExecuteNoQueryAsync(this IDbRequest request)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+
+            using (var response = await request.GetResponseAsync())
+            {
+                return response.ReturnCode;
+            }
+        }
+
+        public static int? ExecuteNoQuery(this IDbRequest request)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+
+            using (var response = request.GetResponse())
+            {
+                return response.ReturnCode;
+            }
         }
     }
 }

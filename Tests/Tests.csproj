@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="End2End.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestDatabaseContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IDbRequestResponse\IDbRequestResponse.csproj">
