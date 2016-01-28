@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TTRider.Data.RequestResponse;
@@ -59,14 +58,17 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task SelectDataNoBufferReuseMemoryAsync()
+        public async Task SelectDataAsync()
         {
             var connection = new SqlConnection(connectionString);
             await connection.OpenAsync();
             var command = connection.CreateCommand();
             command.CommandText = "SELECT Id, Name FROM Person Order By Id;";
 
-            var request = DbRequest.Create(command, DbRequestMode.NoBufferReuseMemory);
+            var prereqcommand = connection.CreateCommand();
+            prereqcommand.CommandText = "Insert Into Person (Id, Name) VALUES (7, 'Scotty');";
+
+            var request = DbRequest.Create(command, null, new IDbCommand[] {prereqcommand});
             Assert.IsNotNull(request);
 
             using (var response = await request.GetResponseAsync())
@@ -92,6 +94,9 @@ namespace Tests
                 Assert.IsTrue(records.MoveNext());
                 Assert.AreEqual(6, records.Current[0]);
                 Assert.AreEqual("Sulu", records.Current[1]);
+                Assert.IsTrue(records.MoveNext());
+                Assert.AreEqual(7, records.Current[0]);
+                Assert.AreEqual("Scotty", records.Current[1]);
                 Assert.IsFalse(records.MoveNext());
                 records.Dispose();
             }
@@ -199,7 +204,7 @@ namespace Tests
         {
             var name = "DB" + Guid.NewGuid().ToString("N") + id;
 
-            var target = System.IO.Path.GetFullPath(@".\" + name + ".mdf");
+            var target = Path.GetFullPath(@".\" + name + ".mdf");
 
             //var cs = @"Data Source=(LocalDB)\v11.0;Integrated Security=True;Connect Timeout=30;AttachDbFilename=";
             //cs += target;
@@ -224,7 +229,7 @@ namespace Tests
                             NAME=Test_log,
                             FILENAME = '{0}{1}_log.ldf'
                         )",
-                        System.IO.Path.GetFullPath(@".\"), name);
+                        Path.GetFullPath(@".\"), name);
 
                     var command = new SqlCommand(sql, connection);
                     command.ExecuteNonQuery();
