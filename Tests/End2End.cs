@@ -1,8 +1,10 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TTRider.Data.RequestResponse;
+using TTRider.Test;
 
 namespace Tests
 {
@@ -230,12 +232,26 @@ namespace Tests
                 using (var connection = db.CreateConnection())
                 {
                     await connection.OpenAsync();
+                    // simulate aborted read
+                    var command = connection.CreateCommand();
+                    command.CommandText = "SELECT * FROM sys.objects;";
+                    var request = DbRequest.Create(command, DbRequestMode.NoBuffer);
+                    var response = request.GetResponse();
+                    response.Dispose();
+                }
+
+                using (var connection = db.CreateConnection())
+                {
+                    await connection.OpenAsync();
+                    // simulate aborted read after one row
+                    var command = connection.CreateCommand();
+                    command.CommandText = "SELECT * FROM sys.objects;";
+                    var request = DbRequest.Create(command, DbRequestMode.NoBuffer);
+                    var response = request.GetResponse();
+                    var first = response.Records.First();
+                    response.Dispose();
                 }
             }
-
-
-
-
         }
     }
 }

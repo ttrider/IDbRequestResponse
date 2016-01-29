@@ -37,6 +37,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="TTRider.TestDatabaseProvider, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TTRider.TestDatabaseProvider.1.0.0\lib\net45\TTRider.TestDatabaseProvider.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -53,13 +57,15 @@
   <ItemGroup>
     <Compile Include="End2End.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestDatabaseContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IDbRequestResponse\IDbRequestResponse.csproj">
       <Project>{e36c36cf-f0c4-4eda-b664-af05b6ab3c1b}</Project>
       <Name>IDbRequestResponse</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
