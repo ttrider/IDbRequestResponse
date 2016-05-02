@@ -21,5 +21,7 @@ namespace TTRider.Data.RequestResponse
         int? ReturnCode { get; }
 
         bool HasMoreData { get; }
+
+        IReadOnlyList<string> FieldNames { get; }
     }
 }

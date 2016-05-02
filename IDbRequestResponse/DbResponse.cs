@@ -94,6 +94,23 @@ namespace TTRider.Data.RequestResponse
             }
         }
 
+        public IReadOnlyList<string> FieldNames
+        {
+            get
+            {
+                if (this.Reader != null && !this.Reader.IsClosed && this.Reader.FieldCount > 0)
+                {
+                    var fields = new string[this.Reader.FieldCount];
+                    for (var i = 0; i < this.Reader.FieldCount; i++)
+                    {
+                        fields[i] = this.Reader.GetName(i);
+                    }
+                    return fields;
+                }
+                return new string[0];
+            }
+        }
+
         protected class DataRecordEnumerable : IEnumerable<object[]>
         {
             private readonly DbResponse response;
