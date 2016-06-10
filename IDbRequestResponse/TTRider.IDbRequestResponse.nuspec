@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>TTRider.IDbRequestResponse</id>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <authors>TTRider</authors>
     <owners>TTRider</owners>
     <licenseUrl>https://github.com/ttrider/IDbRequestResponse/blob/master/LICENSE.TXT</licenseUrl>
@@ -11,7 +11,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Request/Response pattern for IDbConnection/IDbCommand</description>
     <releaseNotes>
-      1.1.0
+      1.2.0
+      --
+      * Removing log4net dependancy
+
+      1.1.2
       --
       * Adding FieldNames property
 

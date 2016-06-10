@@ -10,15 +10,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
-using log4net;
+
 
 namespace TTRider.Data.RequestResponse
 {
-    public abstract class DbResponseBase
+    public abstract class DbRequestResponse
     {
-        static readonly ILog Log = LogManager.GetLogger(typeof(DbResponse));
         private readonly string sessionHash;
-
         protected IDbCommand Command;
         protected IDataReader Reader;
         private IDictionary<string, object> output;
@@ -27,30 +25,23 @@ namespace TTRider.Data.RequestResponse
         private bool disposed;
         protected IDbConnection Connection;
 
-        ~DbResponseBase()
+
+        public static event EventHandler<LogEventArgs> PrerequisiteCommandExecuting;
+        public static event EventHandler<LogEventArgs> CommandExecuting;
+        public static event EventHandler<LogEventArgs> CommandExecuted;
+
+
+        ~DbRequestResponse()
         {
             Dispose(false);
         }
 
-        protected DbResponseBase(IDbRequest request)
+        protected DbRequestResponse(IDbRequest request)
         {
             this.Request = request;
             this.Command = request.Command;
             this.sessionHash = (request.Command.CommandText + String.Join("-", request.PrerequisiteCommands) + DateTime.Now.ToString("s")).GetHashCode().ToString("x8");
-        }
 
-        protected void LogPrerequisite(string message)
-        {
-            Log.DebugFormat("{0}-PREREQUISITE_COMMAND: {1}", this.sessionHash, message);
-        }
-
-        protected void LogCommand(string message)
-        {
-            Log.DebugFormat("{0}-COMMAND: {1}", this.sessionHash, message);
-        }
-        protected void LogCompleted()
-        {
-            Log.DebugFormat("{0}-COMMAND: COMPLETED", this.sessionHash);
         }
 
         protected void FireCompleted()
@@ -92,6 +83,19 @@ namespace TTRider.Data.RequestResponse
             }
         }
 
+        protected void LogPrerequisite(string message)
+        {
+            PrerequisiteCommandExecuting?.Invoke(this, new LogEventArgs(this.sessionHash, message));
+        }
+
+        protected void LogCommand(string message)
+        {
+            CommandExecuting?.Invoke(this, new LogEventArgs(this.sessionHash, message));
+        }
+        protected void LogCompleted()
+        {
+            CommandExecuted?.Invoke(this, new LogEventArgs(this.sessionHash, string.Empty));
+        }
 
         private void Dispose(bool disposing)
         {

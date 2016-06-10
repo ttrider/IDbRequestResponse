@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace TTRider.Data.RequestResponse
 {
-    public class DbResponse : DbResponseBase, IDbResponse
+    public class DbResponse : DbRequestResponse, IDbResponse
     {
         private DataRecordEnumerable currentEnumerable;
 
@@ -69,9 +69,12 @@ namespace TTRider.Data.RequestResponse
             this.currentEnumerable = null;
             if (!this.Reader.NextResult())
             {
-                this.completed = true;
+                if (!this.completed)
+                {
+                    this.completed = true;
+                    LogCompleted();
+                }
                 EnsureOutputValues();
-                LogCompleted();
             }
         }
 

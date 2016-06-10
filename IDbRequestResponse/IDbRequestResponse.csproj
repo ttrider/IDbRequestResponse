@@ -30,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,9 +47,11 @@
     <Compile Include="DbRequestMode.cs" />
     <Compile Include="DbResponseAsync.cs" />
     <Compile Include="DbResponse.cs" />
-    <Compile Include="DbResponseBase.cs" />
+    <Compile Include="DbRequestResponse.cs" />
     <Compile Include="IDbRequest.cs" />
+    <Compile Include="IDbRequestLogging.cs" />
     <Compile Include="IDbResponse.cs" />
+    <Compile Include="LogEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>

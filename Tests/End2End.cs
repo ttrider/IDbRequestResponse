@@ -1,6 +1,8 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TTRider.Data.RequestResponse;
@@ -14,6 +16,9 @@ namespace Tests
         [ClassInitialize()]
         public static void ClassInit(TestContext testcontext)
         {
+            DbRequestResponse.PrerequisiteCommandExecuting += (s, ea) => { Trace.WriteLine($"{ea.SessionHash}-PREREQUISITE_COMMAND: {ea.Message}"); };
+            DbRequestResponse.CommandExecuting += (s, ea) => { Trace.WriteLine($"{ea.SessionHash}-COMMAND: {ea.Message}"); };
+            DbRequestResponse.CommandExecuted += (s, ea) => { Trace.WriteLine($"{ea.SessionHash}-COMMAND: COMPLETED"); };
         }
 
 
@@ -36,6 +41,7 @@ namespace Tests
                 connection.Open();
                 var command = connection.CreateCommand();
                 command.CommandText = "SELECT Id, Name FROM Person Order By Id;";
+
 
                 var request = DbRequest.Create(command, DbRequestMode.NoBufferReuseMemory);
                 Assert.IsNotNull(request);
@@ -89,8 +95,14 @@ namespace Tests
                 {
                     Assert.IsNotNull(response);
 
+                    Assert.AreEqual(2, response.FieldNames.Count);
+
                     var records = response.Records.GetEnumerator();
+                    Assert.AreEqual(2, response.FieldNames.Count);
+
                     Assert.IsTrue(records.MoveNext());
+                    Assert.AreEqual(2, response.FieldNames.Count);
+
                     Assert.AreEqual(1, records.Current[0]);
                     Assert.AreEqual("James", records.Current[1]);
                     Assert.IsTrue(records.MoveNext());

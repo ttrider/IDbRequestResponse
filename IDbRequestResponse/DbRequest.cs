@@ -16,7 +16,7 @@ namespace TTRider.Data.RequestResponse
     {
         public static IDbRequest Create(IDbCommand command, DbRequestMode? mode = DbRequestMode.NoBufferReuseMemory, IEnumerable<IDbCommand> prerequisiteStatements = null)
         {
-            if (command == null) throw new ArgumentNullException("command");
+            if (command == null) throw new ArgumentNullException(nameof(command));
 
             return new DbRequest()
             {
@@ -25,7 +25,6 @@ namespace TTRider.Data.RequestResponse
                 PrerequisiteCommands = prerequisiteStatements??new List<IDbCommand>()
             };
         }
-
 
         public IEnumerable<IDbCommand> PrerequisiteCommands { get; private set; }
         public DbRequestMode Mode { get; private set; }
