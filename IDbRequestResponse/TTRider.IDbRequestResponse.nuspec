@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>TTRider.IDbRequestResponse</id>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <authors>TTRider</authors>
     <owners>TTRider</owners>
     <licenseUrl>https://github.com/ttrider/IDbRequestResponse/blob/master/LICENSE.TXT</licenseUrl>
@@ -11,9 +11,9 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Request/Response pattern for IDbConnection/IDbCommand</description>
     <releaseNotes>
-      1.2.0
+      1.2.1
       --
-      * Removing log4net dependancy
+      * Removing log4net dependency
 
       1.1.2
       --
@@ -27,7 +27,6 @@
     <tags>SQL IDbConnection IDbCommand IDataReader SqlConnection SqlCommand</tags>
     <dependencies>
       <dependency id="TTRider.IDbConnection-Async" version="1.0.2" />
-      <dependency id="log4net" version="2.0.3" />
     </dependencies>
   </metadata>
 </package>
