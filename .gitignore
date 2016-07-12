@@ -54,3 +54,5 @@ Temporary Items
 /Tests/bin/Release
 /Tests/obj
 /Tests/bin/Debug
+/IDbRequestResponse.Core/bin
+/IDbRequestResponse.Core/obj
