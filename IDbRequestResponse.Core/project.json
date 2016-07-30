@@ -1,6 +1,7 @@
 {
-  "title": "TTRider.IDbRequestResponse (core)",
-  "version": "1.3.0-core-beta-7121941",
+  "title": "TTRider.IDbRequestResponse",
+  "name": "TTRider.IDbRequestResponse",
+  "version": "1.3.1",
   "authors": [ "TTRider" ],
   "packOptions": {
     "owners": [ "TTRider" ],
@@ -12,7 +13,7 @@
   "dependencies": {
     "NETStandard.Library": "1.6.0",
     "System.Data.Common": "4.1.0",
-    "IDbConnection-Async.Core": "1.1.0-*"
+    "TTRider.IDbConnection-Async": "1.1.1"
   },
   "frameworks": {
     "netstandard1.6": {

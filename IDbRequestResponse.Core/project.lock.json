@@ -3,20 +3,6 @@
   "version": 2,
   "targets": {
     ".NETFramework,Version=v4.6.1": {
-      "IDbConnection-Async.Core/1.1.0-core-beta-7121929": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.CSharp": "4.0.0",
-          "NETStandard.Library": "1.6.0",
-          "System.Data.Common": "4.1.0"
-        },
-        "compile": {
-          "lib/net461/IDbConnection-Async.Core.dll": {}
-        },
-        "runtime": {
-          "lib/net461/IDbConnection-Async.Core.dll": {}
-        }
-      },
       "Microsoft.CSharp/4.0.0": {
         "type": "package",
         "frameworkAssemblies": [
@@ -670,10 +656,8 @@
         "runtime": {
           "lib/net45/_._": {}
         }
-      }
-    },
-    ".NETStandard,Version=v1.6": {
-      "IDbConnection-Async.Core/1.1.0-core-beta-7121929": {
+      },
+      "TTRider.IDbConnection-Async/1.1.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.CSharp": "4.0.0",
@@ -681,12 +665,14 @@
           "System.Data.Common": "4.1.0"
         },
         "compile": {
-          "lib/netstandard1.6/IDbConnection-Async.Core.dll": {}
+          "lib/net461/TTRider.IDbConnection-Async.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.6/IDbConnection-Async.Core.dll": {}
+          "lib/net461/TTRider.IDbConnection-Async.dll": {}
         }
-      },
+      }
+    },
+    ".NETStandard,Version=v1.6": {
       "Microsoft.CSharp/4.0.0": {
         "type": "package",
         "dependencies": {
@@ -1809,21 +1795,24 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XDocument.dll": {}
         }
+      },
+      "TTRider.IDbConnection-Async/1.1.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.CSharp": "4.0.0",
+          "NETStandard.Library": "1.6.0",
+          "System.Data.Common": "4.1.0"
+        },
+        "compile": {
+          "lib/netstandard1.6/TTRider.IDbConnection-Async.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.6/TTRider.IDbConnection-Async.dll": {}
+        }
       }
     }
   },
   "libraries": {
-    "IDbConnection-Async.Core/1.1.0-core-beta-7121929": {
-      "sha512": "Tz20/aR0+JKZNBB95JTrBIurEYVQO57gzntVhEI0ztuIteYYdPJuvf3D3xCj8rvRmTQ/2BA74faqHJcK3Doi+w==",
-      "type": "package",
-      "path": "IDbConnection-Async.Core/1.1.0-core-beta-7121929",
-      "files": [
-        "IDbConnection-Async.Core.1.1.0-core-beta-7121929.nupkg.sha512",
-        "IDbConnection-Async.Core.nuspec",
-        "lib/net461/IDbConnection-Async.Core.dll",
-        "lib/netstandard1.6/IDbConnection-Async.Core.dll"
-      ]
-    },
     "Microsoft.CSharp/4.0.0": {
       "sha512": "oWqeKUxHXdK6dL2CFjgMcaBISbkk+AqEg+yvJHE4DElNzS4QaTsCflgkkqZwVlWby1Dg9zo9n+iCAMFefFdJ/A==",
       "type": "package",
@@ -4903,13 +4892,24 @@
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._"
       ]
+    },
+    "TTRider.IDbConnection-Async/1.1.1": {
+      "sha512": "u3o6eNUyRwSiQ/VURX1mCSCdzKwy0veRg/ygUl8AYNjKAY1v+REkBUuiKJyJ1fZYpmIL882MTQRd17JYjbvpNg==",
+      "type": "package",
+      "path": "TTRider.IDbConnection-Async/1.1.1",
+      "files": [
+        "TTRider.IDbConnection-Async.1.1.1.nupkg.sha512",
+        "TTRider.IDbConnection-Async.nuspec",
+        "lib/net461/TTRider.IDbConnection-Async.dll",
+        "lib/netstandard1.6/TTRider.IDbConnection-Async.dll"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "": [
-      "IDbConnection-Async.Core >= 1.1.0-*",
       "NETStandard.Library >= 1.6.0",
-      "System.Data.Common >= 4.1.0"
+      "System.Data.Common >= 4.1.0",
+      "TTRider.IDbConnection-Async >= 1.1.1"
     ],
     ".NETFramework,Version=v4.6.1": [],
     ".NETStandard,Version=v1.6": []
