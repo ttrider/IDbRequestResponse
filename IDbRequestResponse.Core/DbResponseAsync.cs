@@ -10,6 +10,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 
 namespace TTRider.Data.RequestResponse
@@ -19,13 +20,13 @@ namespace TTRider.Data.RequestResponse
         private BlockingCollection<object[]> currentEnumerable;
         private string[] currentFieldNames = new string[0];
 
-        DbResponseAsync(IDbRequest request) :
-            base(request)
+        DbResponseAsync(IDbRequest request, ILogger logger) :
+            base(request, logger)
         { }
 
-        internal static async Task<IDbResponse> GetResponseAsync(IDbRequest request)
+        internal static async Task<IDbResponse> GetResponseAsync(IDbRequest request, ILogger logger = null)
         {
-            var response = new DbResponseAsync(request);
+            var response = new DbResponseAsync(request, logger);
             await response.ProcessRequestAsync();
             return response;
         }

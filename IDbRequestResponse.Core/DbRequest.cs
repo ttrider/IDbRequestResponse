@@ -9,12 +9,17 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+
 
 namespace TTRider.Data.RequestResponse
 {
-    public class DbRequest : IDbRequest
+    public class DbRequest : IDbRequest, ILoggerFactory
     {
-        public static IDbRequest Create(IDbCommand command, DbRequestMode? mode = DbRequestMode.NoBufferReuseMemory, IEnumerable<IDbCommand> prerequisiteStatements = null)
+        public ILoggerFactory loggerFactory;
+
+        public static IDbRequest Create(IDbCommand command, DbRequestMode? mode = DbRequestMode.NoBufferReuseMemory, IEnumerable<IDbCommand> prerequisiteStatements = null, ILoggerFactory loggerFactory = null)
         {
             if (command == null) throw new ArgumentNullException(nameof(command));
 
@@ -22,7 +27,8 @@ namespace TTRider.Data.RequestResponse
             {
                 Command = command,
                 Mode = mode.GetValueOrDefault(),
-                PrerequisiteCommands = prerequisiteStatements??new List<IDbCommand>()
+                PrerequisiteCommands = prerequisiteStatements??new List<IDbCommand>(),
+                loggerFactory = loggerFactory
             };
         }
 
@@ -47,5 +53,29 @@ namespace TTRider.Data.RequestResponse
             }
             return DbResponse.GetResponseAsync(this);
         }
+
+        #region Implementation of IDisposable
+
+        void IDisposable.Dispose()
+        {
+            this.loggerFactory.Dispose();
+        }
+
+        #endregion
+
+        #region Implementation of ILoggerFactory
+
+        ILogger ILoggerFactory.CreateLogger(string categoryName)
+        {
+            if (this.loggerFactory==null) return NullLogger.Instance;
+            return this.loggerFactory.CreateLogger(categoryName);
+        }
+
+        void ILoggerFactory.AddProvider(ILoggerProvider provider)
+        {
+            this.loggerFactory?.AddProvider(provider);
+        }
+
+        #endregion
     }
 }
