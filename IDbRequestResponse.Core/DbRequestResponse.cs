@@ -10,12 +10,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 
 namespace TTRider.Data.RequestResponse
 {
     public abstract class DbRequestResponse
     {
+        protected readonly ILogger Logger;
         private readonly string sessionHash;
         protected IDbCommand Command;
         protected IDataReader Reader;
@@ -36,8 +38,9 @@ namespace TTRider.Data.RequestResponse
             Dispose(false);
         }
 
-        protected DbRequestResponse(IDbRequest request)
+        protected DbRequestResponse(IDbRequest request, ILogger logger = null)
         {
+            this.Logger = logger;
             this.Request = request;
             this.Command = request.Command;
             this.sessionHash = (request.Command.CommandText + String.Join("-", request.PrerequisiteCommands) + DateTime.Now.ToString("s")).GetHashCode().ToString("x8");
@@ -85,21 +88,34 @@ namespace TTRider.Data.RequestResponse
 
         protected void LogPrerequisite(string message)
         {
+            this.Logger?.LogDebug($"session: {this.sessionHash} - prereq: {message}");
             PrerequisiteCommandExecuting?.Invoke(this, new LogEventArgs(this.sessionHash, message));
         }
 
         protected void LogCommand(string message)
         {
+            this.Logger?.LogDebug($"session: {this.sessionHash} - command: {message}");
             CommandExecuting?.Invoke(this, new LogEventArgs(this.sessionHash, message));
         }
         protected void LogCompleted()
         {
+            this.Logger?.LogDebug($"session: {this.sessionHash} - completed");
             CommandExecuted?.Invoke(this, new LogEventArgs(this.sessionHash, string.Empty));
         }
 
         private void Dispose(bool disposing)
         {
             if (!disposing || disposed) return;
+
+            if (this.Reader != null)
+            {
+                if (!this.Reader.IsClosed)
+                {
+                    this.Reader.Close();
+                }
+                this.Reader.Dispose();
+                this.Reader = null;
+            }
 
             if (Command != null)
             {

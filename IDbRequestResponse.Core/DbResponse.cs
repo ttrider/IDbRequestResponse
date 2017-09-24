@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 
 namespace TTRider.Data.RequestResponse
@@ -25,7 +26,7 @@ namespace TTRider.Data.RequestResponse
             if (request.Command == null) throw new ArgumentException("request.Command");
             if (request.Command.Connection == null) throw new ArgumentException("request.Command.Connection");
 
-            var response = new DbResponse(request);
+            var response = new DbResponse(request, (request as ILoggerFactory).CreateLogger(typeof(DbResponse)));
             response.ProcessRequest();
             return response;
         }
@@ -35,11 +36,11 @@ namespace TTRider.Data.RequestResponse
             if (request == null) throw new ArgumentNullException(nameof(request));
             if (request.Command == null) throw new ArgumentException("request.Command");
             if (request.Command.Connection == null) throw new ArgumentException("request.Command.Connection");
-            return await DbResponseAsync.GetResponseAsync(request);
+            return await DbResponseAsync.GetResponseAsync(request, (request as ILoggerFactory).CreateLogger(typeof(DbResponse)));
         }
 
-        private DbResponse(IDbRequest request)
-            : base(request)
+        private DbResponse(IDbRequest request, ILogger logger = null)
+            : base(request, logger)
         {
         }
 
